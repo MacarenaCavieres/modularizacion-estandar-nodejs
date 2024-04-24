@@ -12,7 +12,8 @@
     "author": "MacarenaCavieres",
     "license": "ISC",
     "dependencies": {
-        "express": "^4.19.2"
+        "express": "^4.19.2",
+        "nanoid": "^5.0.7"
     },
     "devDependencies": {
         "nodemon": "^3.1.0"
