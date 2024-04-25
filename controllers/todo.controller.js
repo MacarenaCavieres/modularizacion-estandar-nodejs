@@ -9,8 +9,7 @@ const getTodo = async (req, res) => {
     try {
         const preview = await readFile(pathFile, "utf-8");
         const todos = JSON.parse(preview);
-
-        res.json(todos);
+        res.render("todos", { todos });
     } catch (err) {
         console.error("Error ===> " + err);
         return res.json({ ok: false });
@@ -20,6 +19,7 @@ const getTodo = async (req, res) => {
 const postTodo = async (req, res) => {
     try {
         const { task = "" } = req.body;
+
         const newTodo = {
             id: nanoid(4),
             task,
@@ -32,7 +32,7 @@ const postTodo = async (req, res) => {
         todos.push(newTodo);
 
         await writeFile(pathFile, JSON.stringify(todos));
-        res.json(todos);
+        return res.redirect("/todos");
     } catch (err) {
         console.error("Error ===> " + err);
         return res.json({ ok: false });
@@ -85,9 +85,21 @@ const putTodo = async (req, res) => {
     }
 };
 
+const formEdit = async (req, res) => {
+    const { id } = req.params;
+    const preview = await readFile(pathFile, "utf-8");
+    const todos = JSON.parse(preview);
+
+    const todo = todos.find((item) => item.id === id);
+    if (!todo) return res.status(404).json({ ok: false, msg: "no se encontró el todo" });
+
+    return res.render("todo-edit", { todo });
+};
+
 export const allMethod = {
     getTodo,
     postTodo,
     deleteTodo,
     putTodo,
+    formEdit,
 };

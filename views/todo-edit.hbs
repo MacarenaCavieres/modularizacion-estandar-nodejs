@@ -1,0 +1,8 @@
+<h1>Editar tarea: {{todo.task}}</h1>
+
+<form id="form">
+    <input type="hidden" value="{{todo.id}}" id="id">
+    <input type="text" value="{{todo.task}}" id="task">
+    <input type="checkbox" {{#if todo.completed}}checked{{/if}} id="completed">
+    <button type="submit">Editar todo</button>
+</form>

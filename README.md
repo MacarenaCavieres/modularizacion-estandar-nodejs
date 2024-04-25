@@ -9,8 +9,17 @@
     ├── todos.json
 └── controllers
     ├── todo.controller.js
+└── public
+    └── assets
+        └── js
+            ├── app.js
 └── routes
     ├── todo.route.js
+└── views
+    ├── todos.hbs
+    ├── todo-edit.hbs
+    └── layouts
+        ├── main.hbs
 └── models
 
 ```
@@ -23,10 +32,16 @@ import todoRoutes from "./routes/todo.route.js";
 
 const app = express();
 
+app.use(express.static("public"));
+
+app.engine(".hbs", engine({ extname: ".hbs" }));
+app.set("view engine", ".hbs");
+app.set("views", path.join(__dirname + "/views"));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/v1/todos", todoRoutes);
+app.use("/todos", todoRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
@@ -60,11 +75,12 @@ const pathFile = path.join(__dirname, "../data/todos.json");
 //lógica de los métodos
 
 export const allMethod = {
-    // métodos para exportar
+    // metodos para exportar a carpeta routes
     getTodo,
     postTodo,
     deleteTodo,
     putTodo,
+    formEdit,
 };
 ```
 
@@ -84,5 +100,86 @@ router.delete("/:id", allMethod.deleteTodo);
 
 router.put("/:id", allMethod.putTodo);
 
+router.get("/edit/:id", allMethod.formEdit);
+
 export default router;
+```
+
+### main.hbs
+
+```html
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>To dos</title>
+    </head>
+    <body>
+        {{{body}}}
+        <script src="/assets/js/app.js"></script>
+    </body>
+</html>
+```
+
+### todos.hbs
+
+```html
+<form action="/todos" method="POST">
+    <input type="text" name="task" placeholder="Ingrese tarea" />
+    <button type="submit">Agregar</button>
+</form>
+```
+
+### todo-edit.hbs
+
+```html
+<form id="form">
+    <input type="hidden" value="{{todo.id}}" id="id" />
+    <input type="text" value="{{todo.task}}" id="task" />
+    <input type="checkbox" {{#if todo.completed}}checked{{/if}} id="completed">
+    <button type="submit">Editar todo</button>
+</form>
+```
+
+### app.js
+
+```js
+const todoDelete = async (id) => {
+    console.log("click");
+    const response = await fetch(`/todos/${id}`, {
+        method: "DELETE",
+    });
+    if (response.ok) {
+        window.location.reload();
+    }
+};
+
+const form = document.getElementById("form");
+const id = document.getElementById("id");
+const task = document.getElementById("task");
+const completed = document.getElementById("completed");
+
+if (form) {
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const editTodo = {
+            id: id.value,
+            task: task.value,
+            completed: completed.value,
+        };
+
+        const response = await fetch(`/todos/${editTodo.id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editTodo),
+        });
+
+        if (response.ok) {
+            window.location.href = "/todos";
+        }
+    });
+}
 ```
