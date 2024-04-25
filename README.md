@@ -128,6 +128,16 @@ export default router;
     <input type="text" name="task" placeholder="Ingrese tarea" />
     <button type="submit">Agregar</button>
 </form>
+
+<ul>
+    {{#if todos}} {{#each todos}}
+    <li>
+        <input type="checkbox" {{#if completed}} checked {{/if}} disabled> {{this.task}}
+        <button onclick="todoDelete('{{id}}')">Eliminar</button>
+        <a href="/todos/edit/{{id}}">Actualizar</a>
+    </li>
+    {{/each}} {{/if}}
+</ul>
 ```
 
 ### todo-edit.hbs
