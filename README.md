@@ -107,7 +107,7 @@ export default router;
 
 ### main.hbs
 
-```html
+```hbs
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -123,7 +123,7 @@ export default router;
 
 ### todos.hbs
 
-```html
+```hbs
 <form action="/todos" method="POST">
     <input type="text" name="task" placeholder="Ingrese tarea" />
     <button type="submit">Agregar</button>
@@ -142,7 +142,7 @@ export default router;
 
 ### todo-edit.hbs
 
-```html
+```hbs
 <form id="form">
     <input type="hidden" value="{{todo.id}}" id="id" />
     <input type="text" value="{{todo.task}}" id="task" />
