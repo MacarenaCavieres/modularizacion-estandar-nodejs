@@ -29,8 +29,12 @@
 ```js
 import express from "express";
 import todoRoutes from "./routes/todo.route.js";
+import { engine } from "express-handlebars";
+import path from "path";
 
 const app = express();
+
+const __dirname = import.meta.dirname;
 
 app.use(express.static("public"));
 
