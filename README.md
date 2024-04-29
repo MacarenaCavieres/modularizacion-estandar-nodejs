@@ -24,6 +24,16 @@
 
 ```
 
+### package.json
+
+```json
+"type": "module",
+"scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+},
+```
+
 ### Index.js
 
 ```js
